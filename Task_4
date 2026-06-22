@@ -1,0 +1,228 @@
+// InteractiveWidgets.js
+import React, { useState } from 'react';
+
+// ==========================================================
+// 1. LIKE BUTTON COMPONENT
+// ==========================================================
+export const LikeButton = () => {
+  const [likes, setLikes] = useState(0);
+
+  return (
+    <div style={styles.card}>
+      <h3 style={styles.cardTitle}>1. Heart Like Button</h3>
+      <button 
+        style={{ ...styles.buttonBase, ...styles.likeBtn }} 
+        onClick={() => setLikes(likes + 1)}
+      >
+        ❤️ Like {likes}
+      </button>
+    </div>
+  );
+};
+
+// ==========================================================
+// 2. FLIPKART-STYLE CART ITEM QUANTITY MANAGER
+// ==========================================================
+export const CartItem = ({ itemName = "Wireless Bluetooth Headphones" }) => {
+  const [quantity, setQuantity] = useState(1);
+
+  const decreaseQty = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  return (
+    <div style={styles.card}>
+      <h3 style={styles.cardTitle}>2. Flipkart Quantity Manager</h3>
+      <div style={styles.cartRow}>
+        <span style={styles.itemName}>{itemName}</span>
+        
+        <div style={styles.quantityGroup}>
+          <button 
+            style={styles.qtyBtn} 
+            onClick={decreaseQty} 
+            disabled={quantity <= 1}
+          >
+            -
+          </button>
+          <span style={styles.qtyDisplay}>{quantity}</span>
+          <button style={styles.qtyBtn} onClick={() => setQuantity(quantity + 1)}>
+            +
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ==========================================================
+// 3. SPOTIFY-STYLE SONG VOTE COMPONENT (Bounded below 0)
+// ==========================================================
+export const SongVote = ({ songTitle = "Blinding Lights", artist = "The Weeknd" }) => {
+  const [votes, setVotes] = useState(0);
+
+  return (
+    <div style={styles.card}>
+      <h3 style={styles.cardTitle}>3. Spotify Song Vote Queue</h3>
+      <div style={styles.voteRow}>
+        <div style={styles.songMeta}>
+          <strong>{songTitle}</strong>
+          <span style={styles.artistName}>{artist}</span>
+        </div>
+        
+        <div style={styles.voteControls}>
+          <button style={styles.voteArrow} onClick={() => setVotes(votes + 1)}>
+            🔼
+          </button>
+          <span style={styles.voteCount}>{votes}</span>
+          <button 
+            style={styles.voteArrow} 
+            onClick={() => setVotes(Math.max(0, votes - 1))}
+            disabled={votes === 0}
+          >
+            🔽
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ==========================================================
+// 4. ZOMATO-STYLE INTERACTIVE RATING SELECTOR
+// ==========================================================
+export const RatingSelector = () => {
+  const [rating, setRating] = useState(0);
+
+  return (
+    <div style={styles.card}>
+      <h3 style={styles.cardTitle}>4. Zomato Food Rating Selector</h3>
+      <div style={styles.starRow}>
+        {[1, 2, 3, 4, 5].map((starValue) => (
+          <span
+            key={starValue}
+            onClick={() => setRating(starValue)}
+            style={{
+              ...styles.star,
+              color: starValue <= rating ? '#E23744' : '#cbd5e1', // Zomato Red / Slate Gray
+            }}
+          >
+            ★
+          </span>
+        ))}
+        {rating > 0 && <span style={styles.ratingLabel}>{rating} / 5 Stars</span>}
+      </div>
+    </div>
+  );
+};
+
+// ==========================================================
+// CENTRAL WRAPPER DASHBOARD EXPORT
+// ==========================================================
+export default function InteractiveWidgetsDemo() {
+  return (
+    <div style={styles.container}>
+      <h1 style={{ textAlign: 'center', color: '#0f172a', marginBottom: '30px' }}>
+        React Interactive UI State Widgets
+      </h1>
+      <LikeButton />
+      <CartItem />
+      <SongVote />
+      <RatingSelector />
+    </div>
+  );
+}
+
+// ==========================================================
+// COMPONENT SPECIFIC STYLES
+// ==========================================================
+const styles = {
+  container: {
+    fontFamily: "'Segoe UI', Roboto, Helvetica, sans-serif",
+    maxWidth: '550px',
+    margin: '40px auto',
+    padding: '0 20px',
+    backgroundColor: '#f8fafc',
+    borderRadius: '12px',
+    boxSizing: 'border-box'
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    border: '1px solid #e2e8f0',
+    borderRadius: '10px',
+    padding: '20px',
+    marginBottom: '20px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+  },
+  cardTitle: {
+    margin: '0 0 15px 0',
+    fontSize: '14px',
+    color: '#64748b',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em'
+  },
+  buttonBase: {
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '6px',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'transform 0.1s ease',
+  },
+  likeBtn: {
+    backgroundColor: '#fff1f2',
+    color: '#e11d48',
+    border: '1px solid #fecdd3',
+  },
+  cartRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  itemName: {
+    fontSize: '16px',
+    fontWeight: '500',
+    color: '#1e293b',
+  },
+  quantityGroup: {
+    display: 'flex',
+    alignItems: 'center',
+    border: '1px solid #cbd5e1',
+    borderRadius: '6px',
+    overflow: 'hidden',
+  },
+  qtyBtn: {
+    padding: '6px 14px',
+    border: 'none',
+    backgroundColor: '#f1f5f9',
+    cursor: 'pointer',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    color: '#334155',
+  },
+  qtyDisplay: {
+    padding: '0 16px',
+    fontSize: '16px',
+    fontWeight: '600',
+    minWidth: '20px',
+    textAlign: 'center',
+  },
+  voteRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  songMeta: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  artistName: {
+    fontSize: '13px',
+    color: '#64748b',
+    marginTop: '2px',
+  },
+  voteControls: {
+    display: 'flex',
+    alignItems: 'center',
