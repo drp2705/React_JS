@@ -1,0 +1,225 @@
+// App.js
+import React, { Component } from 'react';
+
+// ==========================================================
+// 2. USER GREETING FUNCTIONAL COMPONENT
+// ==========================================================
+export const UserGreeting = ({ username }) => {
+  return (
+    <div style={styles.greetingBox}>
+      <p><strong>Functional Component:</strong> Hello, {username}!</p>
+    </div>
+  );
+};
+
+
+// ==========================================================
+// 3. USER GREETING CLASS COMPONENT
+// ==========================================================
+export class UserGreetingClass extends Component {
+  render() {
+    // Accessing parameters passed to the instance through the class constructor context
+    const { username } = this.props;
+    return (
+      <div style={{ ...styles.greetingBox, borderColor: '#6f42c1' }}>
+        <p><strong>Class Component:</strong> Hello, {username}!</p>
+      </div>
+    );
+  }
+}
+
+
+// ==========================================================
+// 4 & 5. MINI PROFILE COMPONENT (Properly Closed & Nested JSX)
+// ==========================================================
+export const MiniProfile = ({ profilePic, name, status }) => {
+  /* Constraint Checklist for Task 5 Validation:
+     - All self-closing nodes like <img> and <br /> are explicitly closed with a trailing slash.
+     - Structural tags are paired properly and nestled safely inside a root <div> grid parent.
+     - Attribute properties use valid JSX naming conventions (e.g., style={}).
+  */
+  return (
+    <div style={styles.profileCard}>
+      <h4 style={styles.sectionLabel}>4 & 5. Instagram Mini Profile</h4>
+      
+      <div style={styles.profileHeader}>
+        <img 
+          src={profilePic} 
+          alt={`${name}'s avatar decoration`} 
+          style={styles.avatar} 
+        />
+        <div style={styles.profileInfo}>
+          <h2 style={styles.profileName}>{name}</h2>
+          <p style={styles.profileStatus}>{status}</p>
+        </div>
+      </div>
+      
+      <div style={styles.profileDivider} />
+      
+      <div style={styles.profileActions}>
+        <button style={styles.actionButton}>Message</button>
+        <button style={{ ...styles.actionButton, backgroundColor: '#efefef', color: '#000' }}>
+          Follow Back
+        </button>
+      </div>
+    </div>
+  );
+};
+
+
+// ==========================================================
+// 1. APPLICATION EXPORT & MAIN ENTRY POINT
+// ==========================================================
+export default function App() {
+  const primaryUser = "Alex Mercer";
+  const mockAvatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80";
+
+  return (
+    <div style={styles.appContainer}>
+      
+      {/* Task 1: JSX Heading Replacement */}
+      <header style={styles.header}>
+        <h1 style={styles.mainHeading}>Welcome to React JSX!</h1>
+      </header>
+
+      <main style={styles.mainLayout}>
+        
+        {/* Task 2 & 3: Component Implementation Comparison Layout */}
+        <section style={styles.section}>
+          <h3 style={styles.sectionTitle}>Component Structural Comparison</h3>
+          <UserGreeting username={primaryUser} />
+          <UserGreetingClass username={primaryUser} />
+        </section>
+
+        {/* Task 4 & 5: Refactored Mini Profile Dashboard */}
+        <section style={styles.section}>
+          <MiniProfile 
+            name={primaryUser}
+            profilePic={mockAvatar}
+            status="🚀 Building scalable web structures with React Hooks & Strict JSX | Open to Collabs!"
+          />
+        </section>
+
+      </main>
+    </div>
+  );
+}
+
+
+// ==========================================================
+// CENTRALIZED DESIGN STYLE TOKENS
+// ==========================================================
+const styles = {
+  appContainer: {
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    backgroundColor: '#fafafa',
+    minHeight: '100vh',
+    padding: '20px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  header: {
+    margin: '40px 0 20px 0',
+    textAlign: 'center',
+  },
+  mainHeading: {
+    fontSize: '28px',
+    fontWeight: '800',
+    color: '#0366d6', // React Blueprint Blue
+    letterSpacing: '-0.02em',
+  },
+  mainLayout: {
+    width: '100%',
+    maxWidth: '460px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+  },
+  section: {
+    width: '100%',
+  },
+  sectionTitle: {
+    fontSize: '13px',
+    textTransform: 'uppercase',
+    color: '#8e8e8e',
+    letterSpacing: '0.06em',
+    marginBottom: '10px',
+    paddingLeft: '5px',
+  },
+  sectionLabel: {
+    margin: '0 0 15px 0',
+    fontSize: '11px',
+    color: '#8e8e8e',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+  },
+  greetingBox: {
+    backgroundColor: '#ffffff',
+    border: '1px solid #0366d6',
+    borderRadius: '6px',
+    padding: '4px 15px',
+    marginBottom: '12px',
+    fontSize: '14px',
+    color: '#24292e',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+  },
+  profileCard: {
+    backgroundColor: '#ffffff',
+    border: '1px solid #dbdbdb',
+    borderRadius: '12px',
+    padding: '25px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+  },
+  profileHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '20px',
+  },
+  avatar: {
+    width: '72px',
+    height: '72px',
+    borderRadius: '50%',
+    objectFit: 'cover',
+    border: '1px solid #dbdbdb',
+  },
+  profileInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+  },
+  profileName: {
+    margin: '0 0 4px 0',
+    fontSize: '18px',
+    fontWeight: '600',
+    color: '#262626',
+  },
+  profileStatus: {
+    margin: 0,
+    fontSize: '13px',
+    color: '#475569',
+    lineHeight: '1.4',
+  },
+  profileDivider: {
+    height: '1px',
+    backgroundColor: '#efefef',
+    margin: '20px 0 15px 0',
+  },
+  profileActions: {
+    display: 'flex',
+    gap: '8px',
+  },
+  actionButton: {
+    flex: 1,
+    border: 'none',
+    backgroundColor: '#0095f6', // Instagram Accent Button Blue
+    color: '#ffffff',
+    padding: '8px 0',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    textAlign: 'center',
+  },
+};
