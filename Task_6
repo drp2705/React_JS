@@ -1,0 +1,132 @@
+// TaskBundle.js
+import React from 'react';
+
+// ==========================================
+// 1. PLAYLIST COMPONENT
+// ==========================================
+export const Playlist = ({ songs }) => {
+  return (
+    <div style={{ padding: '15px', border: '1px solid #e2e8f0', borderRadius: '6px', margin: '15px 0', backgroundColor: '#ffffff' }}>
+      <h3 style={{ margin: '0 0 10px 0', color: '#1e293b' }}>🎵 Audio Track Playlist</h3>
+      <ul style={{ paddingLeft: '20px', margin: 0 }}>
+        {songs.map((song, index) => (
+          <li key={index} style={{ margin: '5px 0', color: '#334155' }}>
+            <strong>{song.title}</strong> — <span style={{ fontStyle: 'italic', color: '#64748b' }}>{song.artist}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+// ==========================================
+// 2. ORDER STATUS COMPONENT
+// ==========================================
+export const OrderStatus = ({ isDelivered }) => {
+  return (
+    <div style={{ padding: '15px', border: '1px solid #e2e8f0', borderRadius: '6px', margin: '15px 0', backgroundColor: '#f8fafc' }}>
+      <h3 style={{ margin: '0 0 5px 0', color: '#1e293b' }}>📦 Order Tracking Center</h3>
+      <p style={{ margin: 0, fontSize: '14px', fontWeight: '500' }}>
+        Status: {isDelivered ? 'Order Delivered 🎉' : 'Order on the way 🚚'}
+      </p>
+    </div>
+  );
+};
+
+// ==========================================
+// 3. FOLLOWER LIST COMPONENT
+// ==========================================
+export const FollowerList = ({ followers }) => {
+  return (
+    <div style={{ padding: '15px', border: '1px solid #e2e8f0', borderRadius: '6px', margin: '15px 0', backgroundColor: '#ffffff' }}>
+      <h3 style={{ margin: '0 0 10px 0', color: '#1e293b' }}>👥 Followers Feed List</h3>
+      {followers.length === 0 ? (
+        <p style={{ margin: 0, color: '#64748b', fontStyle: 'italic' }}>No followers yet</p>
+      ) : (
+        <ul style={{ paddingLeft: '20px', margin: 0 }}>
+          {followers.map((username, index) => (
+            <li key={index} style={{ margin: '4px 0', color: '#0f172a' }}>@{username}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+// ==========================================
+// 4. CART SUMMARY COMPONENT
+// ==========================================
+export const CartSummary = ({ items }) => {
+  const hasItems = items && items.length > 0;
+  const showCheckoutButton = items && items.length >= 3;
+
+  return (
+    <div style={{ padding: '15px', border: '1px solid #e2e8f0', borderRadius: '6px', margin: '15px 0', backgroundColor: '#ffffff' }}>
+      <h3 style={{ margin: '0 0 10px 0', color: '#1e293b' }}>🛒 Checkout Cart Summary</h3>
+      {!hasItems ? (
+        <p style={{ margin: 0, color: '#64748b', fontStyle: 'italic' }}>Cart is empty</p>
+      ) : (
+        <div>
+          <ul style={{ paddingLeft: '20px', margin: '0 0 15px 0' }}>
+            {items.map((item, index) => (
+              <li key={index} style={{ margin: '5px 0', color: '#334155' }}>
+                {item.name} — <strong>${item.price.toFixed(2)}</strong>
+              </li>
+            ))}
+          </ul>
+          {showCheckoutButton && (
+            <button style={{
+              background: '#2563eb',
+              color: '#ffffff',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '4px',
+              fontWeight: '600',
+              cursor: 'pointer'
+            }}>
+              Checkout Now
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ==========================================
+// MAIN COMBINED DEMO EXPORT
+// ==========================================
+export default function TaskBundleDemo() {
+  // Mock Data Setup
+  const mockSongs = [
+    { title: 'Bohemian Rhapsody', artist: 'Queen' },
+    { title: 'Stairway to Heaven', artist: 'Led Zeppelin' },
+    { title: 'Hotel California', artist: 'Eagles' }
+  ];
+
+  const mockFollowers = ['alex_dev', 'coding_wizard', 'react_ninja'];
+  
+  const mockCartItems = [
+    { name: 'Wireless Mouse', price: 25.99 },
+    { name: 'Mechanical Keyboard', price: 89.99 },
+    { name: 'Monitor Stand', price: 34.50 }
+  ];
+
+  return (
+    <div style={{ fontFamily: 'sans-serif', maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
+      <h1 style={{ textAlign: 'center', color: '#0f172a' }}>React Task Bundle</h1>
+      
+      {/* 1. Playlist Test */}
+      <Playlist songs={mockSongs} />
+      
+      {/* 2. Order Status Test (Switch to true/false to check changes) */}
+      <OrderStatus isDelivered={false} />
+      
+      {/* 3. Follower List Test (Pass an empty array [] to test "No followers yet") */}
+      <FollowerList followers={mockFollowers} />
+      
+      {/* 4. Cart Summary Test (Pass fewer items to hide the button or [] to see empty message) */}
+      <CartSummary items={mockCartItems} />
+    </div>
+  );
+}
