@@ -1,0 +1,109 @@
+Step 1: Dependency Installation
+Execute the installation command below inside your React project directory to pull down the dynamic
+routing modules:
+
+Step 2: Core Page Component Declarations
+Define your transactional core layouts representing individual target views. Save these as individual
+components or collect them under a unified directory layout structure.
+npm install react-router-dom
+
+Step 3: Navigation Header Integration
+The Navbar leverages declarative NavLink pointers. The dynamic styling function interprets active
+matching rules inline, updating visual state instantly without page reloads.
+// HomePage.js
+import React from 'react';
+export const HomePage = () => (
+<div>
+<h2 style={{ color: '#111' }}> Welcome to the Store Home Page</h2>
+<p>Explore our top curated catalogs and personalized product suggestions.</p>
+</div>
+);
+// DealsPage.js
+import React from 'react';
+export const DealsPage = () => (
+<div>
+<h2 style={{ color: '#ff9f00' }}> Flipkart-Style Top Deals of the Day!</h2>
+<p>Lightning discounts across electronics, apparel, and home appliances.</p>
+</div>
+);
+// CartPage.js
+import React from 'react';
+export const CartPage = () => (
+<div>
+<h2 style={{ color: '#2874f0' }}> Your Shopping Cart</h2>
+<p>Your shopping cart is currently empty. Items you add will appear here.</p>
+</div>
+);
+// NotFound.js
+import React from 'react';
+export const NotFound = () => (
+<div style={{ textAlign: 'center', padding: '40px 10px' }}>
+<h2 style={{ borderLeft: 'none', color: '#d32f2f' }}> 404 - Page Not Found</h2>
+<p>The URL path requested does not match an authorized resource or route hierarchy.</
+p>
+</div>
+);
+
+Step 4: Application Context Entry Point & Routing Table
+Wire the root elements within your system core pipeline. Setting up a catch-all mapping wildcard
+fallback pattern guarantees that broken navigation addresses safely resolve to your styled 404 resource
+view layout.
+// Navbar.js
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+const Navbar = () => {
+// Callback dynamically tracks routing state for link styling
+const getLinkStyle = ({ isActive }) => ({
+marginRight: '20px',
+textDecoration: 'none',
+fontSize: '18px',
+fontWeight: isActive ? 'bold' : 'normal',
+color: isActive ? '#2874f0' : '#333333', // Distinct brand highlighting
+borderBottom: isActive ? '2px solid #2874f0' : 'none',
+paddingBottom: '5px'
+});
+return (
+<nav style={{
+padding: '15px',
+background: '#ffffff',
+boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+marginBottom: '20px'
+}}>
+<NavLink to="/" style={getLinkStyle}>Home</NavLink>
+<NavLink to="/deals" style={getLinkStyle}>Deals</NavLink>
+<NavLink to="/cart" style={getLinkStyle}>Cart</NavLink>
+</nav>
+);
+};
+export default Navbar;
+
+Architectural Takeaway
+Ensure that <Navbar /> sits explicitly inside <BrowserRouter> but outside <Routes> . This
+prevents the navigation links from unmounting or resetting state when transitions across
+application view schemas take place.
+// App.js
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './Navbar';
+import { HomePage } from './HomePage';
+import { DealsPage } from './DealsPage';
+import { CartPage } from './CartPage';
+import { NotFound } from './NotFound';
+function App() {
+return (
+<BrowserRouter>
+{/* Navbar sits outside Routes to preserve layout wrapper rendering globally */}
+<Navbar />
+<div style={{ padding: '0 20px' }}>
+<Routes>
+<Route path="/" element={<HomePage />} />
+<Route path="/deals" element={<DealsPage />} />
+<Route path="/cart" element={<CartPage />} />
+{/* Universal fallback route catches unmapped parameters */}
+<Route path="*" element={<NotFound />} />
+</Routes>
+</div>
+</BrowserRouter>
+);
+}
+export default App;
