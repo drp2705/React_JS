@@ -1,0 +1,200 @@
+1. User Authentication Context (UserContext.js)
+Manages and shares user data across the application using createContext and a custom
+UserProvider component.
+// UserContext.js
+import React, { createContext, useState } from 'react';
+// Create Context with default values
+export const UserContext = createContext({
+user: { username: 'Guest', loggedIn: false },
+setUser: () => {}
+});
+// Provider Component
+export const UserProvider = ({ children }) => {
+const [user, setUser] = useState({ username: 'Alex', loggedIn: true });
+return (
+<UserContext.Provider value={{ user, setUser }}>
+{children}
+</UserContext.Provider>
+);
+};
+
+2. Navbar Component (Navbar.js)
+Consumes UserContext via the useContext hook to display the current logged-in user's name.
+// Navbar.js
+import React, { useContext } from 'react';
+import { UserContext } from './UserContext';
+const Navbar = () => {
+const { user } = useContext(UserContext);
+return (
+<nav style={{ padding: '10px', borderBottom: '1px solid #ccc', display: 'flex', justifyContent:
+'space-between' }}>
+<h2>MyApp</h2>
+
+<div>
+{user.loggedIn ? `Welcome back, ${user.username}! 👋` : 'Please log in'}
+</div>
+</nav>
+);
+};
+export default Navbar;
+
+3 & 4. Theme Context & Prop Drilling Refactor
+ThemeContext.js
+Manages the application's global appearance state (light or dark mode).
+// ThemeContext.js
+import React, { createContext, useState } from 'react';
+export const ThemeContext = createContext();
+export const ThemeProvider = ({ children }) => {
+const [theme, setTheme] = useState('light');
+const toggleTheme = () => {
+setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+};
+return (
+<ThemeContext.Provider value={{ theme, toggleTheme }}>
+{children}
+</ThemeContext.Provider>
+);
+};
+
+ComponentHierarchy.js (Refactored Structure)
+Demonstrates the elimination of intermediate props (prop-drilling) by pulling the theme directly
+into the deepest child component using useContext.
+// ComponentHierarchy.js
+import React, { useContext } from 'react';
+import { ThemeContext } from './ThemeContext';
+// 1. Parent Component (No props passed down!)
+export const ParentComponent = () => {
+return (
+<div style={{ padding: '10px', border: '1px solid gray' }}>
+
+<h3>Parent Component</h3>
+<ChildComponent />
+</div>
+);
+};
+// 2. Child Component (Acts purely as a structural layout wrapper)
+const ChildComponent = () => {
+return (
+<div style={{ padding: '10px', border: '1px dashed gray' }}>
+<h4>Child Component</h4>
+<DeepChildComponent />
+</div>
+);
+};
+// 3. Deepest Child (Directly consumes context)
+const DeepChildComponent = () => {
+const { theme } = useContext(ThemeContext);
+return (
+<div style={{
+padding: '10px',
+backgroundColor: theme === 'light' ? '#eee' : '#555',
+color: theme === 'light' ? '#000' : '#fff'
+}}>
+<h5>Deep Child Component</h5>
+<p>Current Theme Applied: <strong>{theme}</strong></p>
+</div>
+);
+};
+
+5. Notification Management Context
+(NotificationContext.js)
+Manages unread notification counts, simulating features commonly found in messaging
+applications like WhatsApp.
+// NotificationContext.js
+import React, { createContext, useState } from 'react';
+export const NotificationContext = createContext();
+export const NotificationProvider = ({ children }) => {
+const [count, setCount] = useState(3); // Start with 3 unread messages
+const increment = () => setCount(prev => prev + 1);
+
+const clearNotifications = () => setCount(0);
+return (
+<NotificationContext.Provider value={{ count, increment, clearNotifications }}>
+{children}
+</NotificationContext.Provider>
+);
+};
+
+NotificationDemo.js
+// NotificationDemo.js
+import React, { useContext } from 'react';
+import { NotificationContext } from './NotificationContext';
+const NotificationDemo = () => {
+const { count, increment, clearNotifications } = useContext(NotificationContext);
+return (
+<div style={{ padding: '15px', border: '1px solid #ccc', borderRadius: '5px', marginTop: '15px'
+}}>
+<h3>WhatsApp Demo Mock</h3>
+<div style={{ position: 'relative', display: 'inline-block', padding: '10px' }}>
+<span style={{ fontSize: '24px' }}>💬 Chat Icon</span>
+{count > 0 && (
+<span style={{
+position: 'absolute',
+top: '0',
+right: '0',
+background: 'red',
+color: 'white',
+borderRadius: '50%',
+padding: '2px 8px',
+fontSize: '12px'
+}}>
+{count}
+</span>
+)}
+</div>
+<div style={{ marginTop: '10px' }}>
+<button onClick={increment} style={{ marginRight: '10px' }}>Simulate New
+Message</button>
+<button onClick={clearNotifications}>Mark as Read</button>
+</div>
+</div>
+);
+};
+
+export default NotificationDemo;
+
+6. Application Entry Point (App.js)
+Composes all the providers and demonstrates how to dynamically change the layout theme
+based on the active context.
+// App.js
+import React, { useContext } from 'react';
+import { UserProvider } from './UserContext';
+import { ThemeProvider, ThemeContext } from './ThemeContext';
+import { NotificationProvider } from './NotificationContext';
+import Navbar from './Navbar';
+import { ParentComponent } from './ComponentHierarchy';
+import NotificationDemo from './NotificationDemo';
+const MainAppContent = () => {
+const { theme, toggleTheme } = useContext(ThemeContext);
+const appStyles = {
+backgroundColor: theme === 'light' ? '#ffffff' : '#222222',
+color: theme === 'light' ? '#000000' : '#ffffff',
+minHeight: '100vh',
+padding: '20px',
+transition: 'all 0.3s ease'
+};
+return (
+<div style={appStyles}>
+<Navbar />
+<div style={{ margin: '20px 0' }}>
+<button onClick={toggleTheme}>
+Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
+</button>
+</div>
+<ParentComponent />
+<NotificationDemo />
+</div>
+);
+};
+export default function App() {
+return (
+<UserProvider>
+
+<ThemeProvider>
+<NotificationProvider>
+<MainAppContent />
+</NotificationProvider>
+</ThemeProvider>
+</UserProvider>
+);
+}
