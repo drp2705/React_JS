@@ -1,0 +1,251 @@
+// ReactStateTasks.js
+import React, { useState } from 'react';
+
+// ==========================================================
+// 1. LIKE BUTTON COMPONENT
+// ==========================================================
+export const LikeButton = () => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div style={styles.card}>
+      <h3>1. Like Button</h3>
+      <button style={styles.buttonBlue} onClick={() => setCount(count + 1)}>
+        👍 Like ({count})
+      </button>
+    </div>
+  );
+};
+
+// ==========================================================
+// 2. SEARCH BAR COMPONENT (Real-Time Mirroring)
+// ==========================================================
+export const SearchBar = () => {
+  const [query, setQuery] = useState('');
+
+  return (
+    <div style={styles.card}>
+      <h3>2. Flipkart-Style Search Bar</h3>
+      <input
+        type="text"
+        placeholder="Search for products, brands and more..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        style={styles.input}
+      />
+      <p style={styles.previewText}>
+        <strong>Searching for:</strong> {query ? query : <span style={{ color: '#aaa' }}>Start typing...</span>}
+      </p>
+    </div>
+  );
+};
+
+// ==========================================================
+// 3 & 5. LOGIN FORM COMPONENT (Controlled & Auto-Cleared)
+// ==========================================================
+export const LoginForm = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    // Prevent standard browser layout refresh
+    e.preventDefault();
+
+    // Trigger explicit alert with values
+    alert(`Login Details Submitted:\nUsername: ${username}\nPassword: ${password}`);
+
+    // Constraint: Reset input fields cleanly without window/page reloads
+    setUsername('');
+    setPassword('');
+  };
+
+  return (
+    <div style={styles.card}>
+      <h3>3 & 5. Secure Login Form</h3>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <input
+          type="text"
+          placeholder="Enter Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <input
+          type="password"
+          placeholder="Enter Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <button type="submit" style={styles.buttonGreen}>
+          Login
+        </button>
+      </form>
+    </div>
+  );
+};
+
+// ==========================================================
+// 4. PLAYLIST ADDER COMPONENT (Spotify Style)
+// ==========================================================
+export const PlaylistAdder = () => {
+  const [songTitle, setSongTitle] = useState('');
+  const [artist, setArtist] = useState('');
+  const [playlist, setPlaylist] = useState([
+    { title: 'Bohemian Rhapsody', artist: 'Queen' }
+  ]);
+
+  const handleAddSong = (e) => {
+    e.preventDefault();
+    if (!songTitle.trim() || !artist.trim()) return;
+
+    // Append to list immutably using modern spread patterns
+    const newSong = { title: songTitle, artist: artist };
+    setPlaylist([...playlist, newSong]);
+
+    // Clear input forms for continuous additions
+    setSongTitle('');
+    setArtist('');
+  };
+
+  return (
+    <div style={styles.card}>
+      <h3>4. Spotify-Style Playlist Adder</h3>
+      <form onSubmit={handleAddSong} style={styles.formInline}>
+        <input
+          type="text"
+          placeholder="Song Title"
+          value={songTitle}
+          onChange={(e) => setSongTitle(e.target.value)}
+          required
+          style={{ ...styles.input, marginRight: '10px', flex: 1 }}
+        />
+        <input
+          type="text"
+          placeholder="Artist"
+          value={artist}
+          onChange={(e) => setArtist(e.target.value)}
+          required
+          style={{ ...styles.input, marginRight: '10px', flex: 1 }}
+        />
+        <button type="submit" style={styles.buttonSpotify}>
+          ➕ Add Song
+        </button>
+      </form>
+
+      <ul style={styles.list}>
+        {playlist.map((song, index) => (
+          <li key={index} style={styles.listItem}>
+            🎵 <strong>{song.title}</strong> — <span style={{ color: '#666' }}>{song.artist}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+// ==========================================================
+// CENTRAL WRAPPER DASHBOARD EXPORT
+// ==========================================================
+export default function ReactStateTasksDemo() {
+  return (
+    <div style={styles.container}>
+      <h1 style={{ textAlign: 'center', color: '#1e293b', marginBottom: '30px' }}>
+        React State Management Bundle
+      </h1>
+      <LikeButton />
+      <SearchBar />
+      <LoginForm />
+      <PlaylistAdder />
+    </div>
+  );
+}
+
+// ==========================================================
+// REUSABLE EMBEDDED STYLES OBJECT
+// ==========================================================
+const styles = {
+  container: {
+    fontFamily: "'Segoe UI', Roboto, sans-serif",
+    maxWidth: '600px',
+    margin: '40px auto',
+    padding: '0 20px',
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    border: '1px solid #e2e8f0',
+    borderRadius: '8px',
+    padding: '20px',
+    marginBottom: '20px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+  },
+  input: {
+    width: '100%',
+    padding: '10px 14px',
+    boxSizing: 'border-box',
+    border: '1px solid #cbd5e1',
+    borderRadius: '6px',
+    fontSize: '15px',
+    outline: 'none',
+    marginBottom: '12px',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  formInline: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '15px',
+  },
+  previewText: {
+    fontSize: '15px',
+    color: '#334155',
+    margin: '8px 0 0 0',
+  },
+  list: {
+    listStyle: 'none',
+    padding: 0,
+    margin: '15px 0 0 0',
+    borderTop: '1px solid #f1f5f9',
+  },
+  listItem: {
+    padding: '10px 0',
+    borderBottom: '1px solid #f1f5f9',
+    fontSize: '15px',
+  },
+  buttonBlue: {
+    padding: '10px 20px',
+    backgroundColor: '#2874f0', // Flipkart Blue
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    fontSize: '15px',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  buttonGreen: {
+    padding: '10px 20px',
+    backgroundColor: '#24292e',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '6px',
+    fontSize: '15px',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  buttonSpotify: {
+    padding: '10px 20px',
+    backgroundColor: '#1DB954', // Spotify Green
+    color: '#fff',
+    border: 'none',
+    borderRadius: '25px',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    whiteSpace: 'nowrap',
+    height: '42px',
+  },
+};
