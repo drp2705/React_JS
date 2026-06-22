@@ -1,0 +1,62 @@
+1. Project Initialization & Setup Commands
+To create and initialize your new project, run the following commands sequentially in your system terminal:
+
+# Verify your local Node.js environment installation versions
+node -v
+npm -v
+
+# Scaffold the boilerplate React application repository
+npx create-react-app InstaCloneStarter
+
+# Navigate directly into the newly created root directory context
+cd InstaCloneStarter
+
+# Initialize the development server engine 
+npm start
+
+2 & 3. Integrated Source Modifications (App.js & TrendingSong.js)
+To keep everything structured, clean, and fast to implement, you can set up your components as shown below.
+
+Create your Component File: src/TrendingSong.js
+Create a new file named TrendingSong.js in your /src folder and paste the following functional component:
+
+// src/TrendingSong.js
+import React from 'react';
+
+const TrendingSong = () => {
+  return (
+    <h2 style={{ color: '#1DB954', fontFamily: 'sans-serif' }}>
+      Trending on Spotify: Calm Down
+    </h2>
+  );
+};
+
+export default TrendingSong;
+
+Update your Main File: src/App.js
+Open your existing App.js file, replace its entire contents with the following code to import TrendingSong and update your main workspace landing text:
+
+// src/App.js
+import React from 'react';
+import TrendingSong from './TrendingSong';
+
+function App() {
+  return (
+    <div style={{ textAlign: 'center', marginTop: '50px', fontFamily: 'sans-serif' }}>
+      {/* Task 2: Main Heading */}
+      <h1 style={{ color: '#E23744' }}>Welcome to My React Zomato App</h1>
+      
+      {/* Task 3: Imported Spotify Component */}
+      <TrendingSong />
+    </div>
+  );
+}
+
+export default App;
+
+4. Architectural Explanation: React Virtual DOM
+Traditional DOM manipulation forces the browser to re-paint the layout of the entire web page even for minor text changes, which is computationally expensive and slow.
+
+React solves this by creating a lightweight virtual copy of the real DOM in memory. When state updates occur, React changes this virtual tree first, compares it against
+a snapshot of the previous layout (a process called Diffing), and then applies only the isolated changes to the actual browser DOM (called Reconciliation), preventing 
+unnecessary and sluggish page re-renders.
